@@ -46,51 +46,27 @@ module "panorama" {
 This module cannot target any  release of a PanOS. You will need to run the following command using Azure SDK to see what Panorama versions are currently supported.
 `az vm image list -p paloaltonetworks -f panorama --all`
 
-### Required Variables  
-__Name:__ resource_group_name  
-__TYPE:__  String  
-__DESCRIPTION:__ Resoure group name for resources. i.e. test-rg   
+## Providers
 
-__Name:__ Location  
-__TYPE:__  String  
-__DESCRIPTION:__ Location to create resources. i.e. West US  
+| Name | Version |
+|------|---------|
+| azurerm | ~> 2.0.0 |
 
-__Name:__ panoramas  
-__TYPE:__ Map  
-__DESCRIPTION:__ This variable is used to defined your Panoramas. They key will be the name of the Panorama. __Note:__ This module currently only supports SSH key deployments.  
-__REQUIRED KEYS:__   
+## Inputs
 
-| key | type | Description |
----|---|---
-| subnet_id  | string  | Subnet ID of the Panorama interface. |
-| network_security_group_id | string | NSG ID to attache to Panoram interface. | 
-| admin_username | string | username for the VM |
-| ssh_key | string | public ssh key to use for inital login |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:-----:|
+| location | The location/region where the virtual network is created. Changing this forces a new resource to be created. | `string` | n/a | yes |
+| pan\_publisher | Publish for Source image and Plan parameters | `string` | `"paloaltonetworks"` | no |
+| pan\_series | Palo appliance type. This shoudl only be panoram | `string` | `"panorama"` | no |
+| pan\_size | VM size to launch - at least Standard\_DS5\_v2 for Panorama mode | `string` | `"Standard_DS3_v2"` | no |
+| pan\_sku | License type - only BYOL is acceptable for Panorama at this point | `string` | `"byol"` | no |
+| pan\_version | IOS verstion to launch. | `string` | `"latest"` | no |
+| panoramas | Map of defined panoramas. Check example/basic/main.tf for an example. Also reference README.md | `map(any)` | n/a | yes |
+| resource\_group\_name | The name of the resource group in which the resources will be created | `string` | n/a | yes |
 
-__OPTIONAL KEYS:__    
+## Outputs
 
-| key | type | Description |
----|---|---
-| disk_encryption_set_id | string  | Preview mode feature, may not work in all locations. |
-| availability_set_id | string | Availability Set ID to put hte Panoramas into. | 
-| storage_account_uri | string | Storaged account uri. This key enables boot diagnostics block. | 
-| logger_size | integer | This key represents size of additional disk for deployment in Panorama mode or Logger mode. |  
-| private_ip_address_allocation | string | This will assing the private ip address as either __STATIC__ or the default, __DYNAMIC__. if __STATIC__ is specified, please assign __private_ip_address__.
-| private_ip_address | string | This will assign a static private IP for use. |
-| public_ip_address_id | string | This will assign a public ip that was created. | 
-
-### Optional Variables
-__Name:__ pan_publisher  
-__TYPE:__ string  
-__DESCRIPTION:__ Name of the image publish, defaults to __paloaltonetworks__  
-__Name:__ pan_series  
-__TYPE:__ string  
-__DESCRIPTION:__  Name of type of product or offer, defaults to __panorama__.  
-
-__Name:__ pan_version  
-__TYPE:__ string  
-__DESCRIPTION:__  PanOS version to be deployed, defaults to __latest__  
-
-__Name:__ pan_size  
-__TYPE:__ string  
-__DESCRIPTION:__ Size of Panorama to deploy, defaults to __Standard_DS3_v2__.  
+| Name | Description |
+|------|-------------|
+| panoramas | Information of Panorama's deployed to Azure. |
