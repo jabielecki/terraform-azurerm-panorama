@@ -38,12 +38,14 @@ module "panoramas" {
     panorama1 = {
       admin_username            = "fwadmin"
       ssh_key                   = var.ssh_key
+      pan_size                  = "Standard_DS3_v2"
       subnet_id                 = azurerm_subnet.test-subnet.id
       network_security_group_id = azurerm_network_security_group.test-nsg.id
     }
     panorama2 = {
       admin_username            = "fwadmin"
       ssh_key                   = var.ssh_key
+      pan_size                  = "Standard_DS3_v2"
       subnet_id                 = azurerm_subnet.test-subnet.id
       network_security_group_id = azurerm_network_security_group.test-nsg.id
     }

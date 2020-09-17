@@ -4,7 +4,7 @@ This module is designed to provision Panoramas in Azure on exsisting resources. 
 
 ## Usage
 
-Panorama Example
+### Minimal Example
 
 ```hcl
 module "panorama" {
@@ -15,6 +15,7 @@ module "panorama" {
     panorama1 = {
       admin_username            = "fwadmin"
       ssh_key                   = var.ssh_key
+      pan_size                  = "Standard_DS3_v2"
       subnet_id                 = azurerm_subnet.test-subnet.id
       network_security_group_id = azurerm_network_security_group.test-nsg.id
     }
@@ -23,7 +24,8 @@ module "panorama" {
 
 ```
 
-Panorama Mode Example
+### Panorama-Mode Example
+
 ```hcl
 module "panorama" {
   source              = "https://github.com/PaloAltoNetworks/terraform-azurerm-panorama?ref=v0.1.0"
@@ -33,10 +35,10 @@ module "panorama" {
     panorama1 = {
       admin_username            = "fwadmin"
       ssh_key                   = var.ssh_key
-      pan_size                  = "Standard_DS5_v2" 
+      pan_size                  = "Standard_DS5_v2"
       subnet_id                 = azurerm_subnet.test-subnet.id
       network_security_group_id = azurerm_network_security_group.test-nsg.id
-      logger_size = 2048
+      logger_size               = 2048
     }
   }
 }
@@ -45,6 +47,8 @@ module "panorama" {
 ## Caveats
 This module cannot target any  release of a PanOS. You will need to run the following command using Azure SDK to see what Panorama versions are currently supported.
 `az vm image list -p paloaltonetworks -f panorama --all`
+
+For pan_size use at least `Standard_DS5_v2` for Panorama mode and at least `Standard_DS3_v2` for Management-Only mode.
 
 ## Providers
 
@@ -59,10 +63,9 @@ This module cannot target any  release of a PanOS. You will need to run the foll
 | location | The location/region where the virtual network is created. Changing this forces a new resource to be created. | `string` | n/a | yes |
 | pan\_publisher | Publish for Source image and Plan parameters | `string` | `"paloaltonetworks"` | no |
 | pan\_series | Palo appliance type. This shoudl only be panoram | `string` | `"panorama"` | no |
-| pan\_size | VM size to launch - at least Standard\_DS5\_v2 for Panorama mode | `string` | `"Standard_DS3_v2"` | no |
 | pan\_sku | License type - only BYOL is acceptable for Panorama at this point | `string` | `"byol"` | no |
 | pan\_version | IOS verstion to launch. | `string` | `"latest"` | no |
-| panoramas | Map of defined panoramas. Check example/basic/main.tf for an example. Also reference README.md | `map(any)` | n/a | yes |
+| panoramas | Map of defined panoramas. Check example/basic/main.tf for an example. | `map(any)` | n/a | yes |
 | resource\_group\_name | The name of the resource group in which the resources will be created | `string` | n/a | yes |
 
 ## Outputs
